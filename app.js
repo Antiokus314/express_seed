@@ -1,6 +1,19 @@
 var express = require('express');
 
 var app = express();
-require('./middleware/default').load(app, require('path'), require('morgan'), require('cookie-parser'), require('body-parser'));
-require('./middleware/error_handlers').load(app);
+var path = require('path');
+
+var Middleware = require('./middleware');
+var m = new Middleware(app, path);
+
+m.basic();
+
+m.assets();
+app.get('/', function(req, res, next) {
+  res.render('index', { title: 'Express Seed' });
+});
+
+m.errors();
+
+
 module.exports = app;
