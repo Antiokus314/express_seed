@@ -23,6 +23,4 @@ var middleware = {
   }
 };
 
-module.exports = function() {
-  return Object.create(middleware);
-};
+module.exports = middleware;

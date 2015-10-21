@@ -3,13 +3,13 @@ process.env.DEBUG = env === 'development' ? '*:server' : '';
 
 var express = require('express');
 var app = express();
-app.set('env', env);
-
 var path = require('path');
 var routing = require('resource-routing');
-var controllers_dir = path.resolve(path.join(__dirname, 'controllers'));
+var middleware = require('./middleware');
 
-var middleware = require('./middleware')();
+
+app.set('env', env);
+var controllers_dir = path.resolve(path.join(__dirname, 'controllers'));
 
 middleware.load(app, function() {
   routing.root(app, controllers_dir, 'home', 'index');
