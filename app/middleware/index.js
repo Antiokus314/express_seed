@@ -6,14 +6,14 @@ var path = require('path');
 
 function createAssetPipeline(app) {
   var env = new Mincer.Environment(path.join(__dirname, '..'));
-  env.appendPath(path.join(__dirname, '..', 'app', 'assets', 'stylesheets'))
-  env.appendPath(path.join(__dirname, '..', 'app', 'assets', 'javascripts'))
-  env.appendPath(path.join(__dirname, '..', 'app', 'assets', 'images'))
+  env.appendPath(path.join(__dirname, '..', 'assets', 'stylesheets'))
+  env.appendPath(path.join(__dirname, '..', 'assets', 'javascripts'))
+  env.appendPath(path.join(__dirname, '..', 'assets', 'images'))
   app.use('/assets', Mincer.createServer(env));
 }
 
 function loadBasicSettings(app) {
-  app.set('views', path.join(__dirname, '..', 'app', 'views'));
+  app.set('views', path.join(__dirname, '..', 'views'));
   app.set('view engine', 'jade');
 
   // uncomment after placing your favicon in /public
@@ -63,7 +63,7 @@ var middleware = {
     loadBasicSettings(app);
     createAssetPipeline(app);
     if (cb) {
-      cb(app);
+      cb();
     }
     loadErrors(app);
   }

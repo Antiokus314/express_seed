@@ -7,15 +7,15 @@ app.set('env', env);
 
 var path = require('path');
 var routing = require('resource-routing');
-var controllers_dir = path.resolve('./app/controllers');
+var controllers_dir = path.resolve(path.join(__dirname, 'controllers'));
 
 var middleware = require('./middleware')();
 
-middleware.load(app, function(a) {
+middleware.load(app, function() {
   routing.root(app, controllers_dir, 'home', 'index');
 
   if (app.get('env') === 'development') {
-    routing.expose_routing_table(a);
+    routing.expose_routing_table(app);
   }
 });
 
