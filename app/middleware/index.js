@@ -1,8 +1,8 @@
 var middleware = {
-  load: function load(app, cb) {
+  load: function load(app) {
     require('./basic').load(app);
     require('./assets').load(app);
-    if (cb) cb();
+    require('./routes').load(app);
     require('./errors').load(app);
   }
 };

@@ -17,9 +17,8 @@ function loadBasicSettings(app) {
 }
 
 var middleware = {
-  load: function(app, cb) {
+  load: function(app) {
     loadBasicSettings(app);
-    if (cb) cb();
   }
 };
 

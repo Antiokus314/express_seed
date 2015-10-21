@@ -10,9 +10,8 @@ function createAssetPipeline(app) {
 }
 
 var middleware = { 
-  load: function(app, cb) {
+  load: function(app) {
     createAssetPipeline(app);
-    if (cb) cb();
   }
 };
 

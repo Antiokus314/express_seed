@@ -38,9 +38,8 @@ function loadErrors(app) {
 }
 
 var middleware = {
-  load: function(app, cb) {
+  load: function(app) {
     loadErrors(app);
-    if (cb) cb();
   }
 };
 
