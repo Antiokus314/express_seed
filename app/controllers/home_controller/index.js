@@ -6,6 +6,4 @@ module.exports = function(controller) {
       res.render('index', { title: 'Express Seed' });
     });
   });
-
-  return homeController;
 };

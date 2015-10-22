@@ -6,8 +6,7 @@ var middleware = {
   load: function(app) {
     var base = app.get('base_controller');
     fs.readdirSync(controllersDir).forEach(function(controllerFile) {
-      var controller = require(path.join(controllersDir, controllerFile))(base);
-      app.use(controller.path, controller.router);
+      require(path.join(controllersDir, controllerFile))(base);
     });
   }
 };
