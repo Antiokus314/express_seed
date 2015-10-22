@@ -6,9 +6,6 @@ home_controller.register(function(router) {
     res.render('index', { title: 'Express Seed' });
   });
 
-  router.get('/index', function(req, res, next) {
-    res.render('index', { title: 'Express Seed' });
-  });
 });
 
 module.exports = home_controller;
