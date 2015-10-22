@@ -10,17 +10,17 @@ var base_controller = {
   register: function(cb) {
     var self = this;
     var router = Router();
-    cb(router);
+    if (cb) cb(router);
     self.router = router;
-  },
-  load: function(app) {
-    var self = this;
-    app.use(self.path, self.router);
   }
 };
 
-module.exports = function(url, context) {
-  var controller = Object.create(base_controller);
-  controller.init(url, context);
-  return controller;
-};
+module.exports = {
+  load: function(app) {
+    app.set('base_controller', function(url, context) {
+      var controller = Object.create(base_controller);
+      controller.init(url, context);
+      return controller;
+    });
+  }
+}

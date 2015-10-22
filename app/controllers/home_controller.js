@@ -1,11 +1,11 @@
-var home_controller = require('./base_controller')('/');
+module.exports = function(controller) {
+  var homeController = controller('/');
 
-home_controller.register(function(router) {
-
-  router.get('/', function(req, res, next) {
-    res.render('index', { title: 'Express Seed' });
+  homeController.register(function(router) {
+    router.get('/', function(req, res, next) {
+      res.render('index', { title: 'Express Seed' });
+    });
   });
 
-});
-
-module.exports = home_controller;
+  return homeController;
+};
