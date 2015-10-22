@@ -1,5 +1,5 @@
 var path = require('path');
-var appPath = path.resolve(path.join(__dirname, '..'));
+var appPath = path.resolve(path.join(__dirname, '..', 'app'));
 var defaultAssetPath = path.join(appPath, 'assets');
 
 
@@ -13,4 +13,4 @@ module.exports = {
   ],
   assetMacroProcessor: ['.js', '.css', '.scss'],
   mountPoint: '/assets'
-}
+};

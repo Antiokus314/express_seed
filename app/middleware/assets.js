@@ -1,7 +1,7 @@
 var Mincer = require('mincer');
 var path = require('path');
 var env = new Mincer.Environment(path.join(__dirname, '..'));
-var assetConfig = require('./assetConfig');
+var assetConfig = require('../../config/assets');
 
 function createAssetPipeline(app) {
   assetConfig.assetPaths.forEach(function(p) {

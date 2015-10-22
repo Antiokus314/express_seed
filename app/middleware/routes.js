@@ -1,10 +1,11 @@
-var path = require('path');
-var controllers_dir = path.resolve(path.join(__dirname, '..', 'controllers'));
 var routing = require('resource-routing');
+var routes = require('../../config/routes');
 
 var middleware = {
   load: function(app) {
-    routing.root(app, controllers_dir, 'home', 'index');
+    routes.forEach(function(route) {
+      routing[route[0]](app, route[1], route[2], route[3]);
+    });
 
     if (app.get('env') === 'development') {
       routing.expose_routing_table(app);
