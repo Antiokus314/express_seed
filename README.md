@@ -16,12 +16,12 @@ A seed expressjs application
 │   ├── controllers
 │   ├── index.js
 │   ├── middleware
+│   ├── utilities
 │   └── views
 ├── bin
 │   └── www
 ├── config
-│   ├── assets.js
-│   └── routes.js
+│   └── assets.js
 └── package.json
 
 ```
@@ -29,56 +29,39 @@ A seed expressjs application
 ### app/index.js
 Loads the relevant controller + middleware information into the application
 
+### app/utilities
+Loads in utility modules necessary for the application.
+
 ### app/controllers
-All controllers get loaded into this directory. Using a very "rails"-esque interface with restful actions, the routing layer
-underneath can be viewed [here](https://www.npmjs.com/package/express-resource-routing). In this application, the routes are
-declared inside **app/middleware/routes.js** file.
+All controllers get loaded into this directory. The controller interface is fairly straightforward (uses the built in express.Router)
 
 #### controller interface
-if in routes.js file you have "routing.resources(app, dir, "users")", a complete set of restful actions are expected on **users_controller.js** (note the naming conventions), with a set of endpoints corresponding to those actions at **"/users"**.
-e.g.
-
-
-```
-app/middleware/routes.js
-
-
-...
-routing.resources(app, controllerDir, "users");
-...
-```
 
 
 ```
 app/controllers/users_controller.js
+or
+app/controllers/users_controller/index.js
 
+module.exports = function(controller) {
+  /**
+    * this is essentially a wrapper around app.use
+    * controller.register(url, callback(router) {
+    *    ... routing ...
+    * });
+    */
+  
+  controller.register('/users', function(router) {
+    /**
+     * this is just the regular express.Router. Nothing fancy here
+     */
 
-exports.index = function(req, res) {
-//your code
-}
+    /* GET (index) Users */
+    router.get('/', function(req, res) {
+      res.send("Users!!");
+    });
+  });
 
-exports.show = function(req, res) {
-//your code
-}
-
-exports.new = function(req, res) {
-//your code
-}
-
-exports.create = function(req, res) {
-//your code
-}
-
-exports.edit = function(req, res) {
-//your code
-}
-
-exports.update = function(req, res) {
-//your code
-}
-
-exports.delete = function(req, res) {
-//your code
 }
 ```
 
@@ -93,15 +76,7 @@ When adding your own middleware methods/files there are a few conventions in pla
 1. Once completely defined, it should be added to the **app/middleware/index.js** load sequence
 1. It should **NOT** be loaded after the error middleware (unless there are special circumstances requiring it so)
 
-### routing
-Routing is done a two-step process.
-1. Declare the route(s)
-2. Create the controller
-
-In order to create a new set of endpoints/routes you just modify the code in the **app/middleware/routes.js** file and add to the load section. [This](https://www.npmjs.com/package/express-resource-routing) is the current routing module used. The interface is utilized exactly as specified.
-
 ## Install & Run
-
 
 ```
 git clone <url>
