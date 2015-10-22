@@ -1,14 +1,14 @@
-var routing = require('express-resource-routing');
 var path = require('path');
+var fs = require('fs');
 var controllersDir = path.resolve(path.join(__dirname, '..', 'controllers'));
 
 var middleware = {
   load: function(app) {
-    routing.root(app, controllersDir, 'home', 'index');
-
-    if (app.get('env') === 'development') {
-      routing.expose_routing_table(app);
-    }
+    fs.readdirSync(controllersDir).forEach(function(controllerFile) {
+      if (controllerFile.indexOf('base_controller') < 0) {
+        require(path.resolve(path.join(controllersDir, controllerFile))).load(app);
+      }
+    });
   }
 };
 
