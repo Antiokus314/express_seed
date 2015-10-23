@@ -1,15 +1,13 @@
 var env = process.env.NODE_ENV || 'development';
-process.env.DEBUG = env === 'development' ? '*:server' : '';
+var container = require('../lib/componentLoader')();
 
 var express = require('express');
 var app = express();
-var path = require('path');
-var utilities = require('./utilities');
-var middleware = require('./middleware');
 
 app.set('env', env);
+container.set('app', app);
 
-utilities.load(app);
-middleware.load(app);
+require('./utilities').load(container);
+require('./middleware').load(container);
 
-module.exports = app;
+module.exports = container;

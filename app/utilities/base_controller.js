@@ -9,13 +9,11 @@ function loadBaseController(app) {
     }
   };
 
-  app.set('base_controller', function() {
-    return Object.create(base_controller);
-  });
+  return Object.create(base_controller);
 }
 
 module.exports = {
   load: function(app) {
-    loadBaseController(app);
+    return loadBaseController(app);
   }
 };
