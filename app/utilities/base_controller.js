@@ -15,5 +15,7 @@ function loadBaseController(app) {
 }
 
 module.exports = {
-  load: loadBaseController
-}
+  load: function(app) {
+    loadBaseController(app);
+  }
+};
