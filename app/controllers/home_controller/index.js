@@ -1,15 +1,22 @@
-module.exports = function(controller) {
-  /**
-   * register router path (e.g. app.use('/', ...)
-   */
-  controller.register('/', function(router) {
-
+module.exports = {
+  load: function(controller) {
     /**
-     * This is just an express.Router instance. use as normal
+     * controller.register
+     * @param String path - specify path (url)
+     * @param Function callback(router) - express.Router instance provided in callback
+     * @returns null
+     *
+     * Create a controller and load into application
      */
-    router.get('/', function(req, res, next) {
-      res.render('index', { title: 'Express Seed' });
-    });
+    controller.register('/', function(router) {
 
-  });
+      /**
+       * This is just an express.Router instance. use as normal
+       */
+      router.get('/', function(req, res, next) {
+        res.render('index', { title: 'Express Seed' });
+      });
+
+    });
+  }
 };

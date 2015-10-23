@@ -23,8 +23,8 @@ A seed expressjs application
 ├── config
 │   └── assets.js
 └── package.json
-
 ```
+
 
 ### app/index.js
 Loads the relevant controller + middleware information into the application
@@ -35,7 +35,14 @@ Loads in utility modules necessary for the application.
 ### app/controllers
 All controllers get loaded into this directory. The controller interface is fairly straightforward (uses the built in express.Router)
 
+
 #### controller interface
+Some utilities have been put in place, for ease of use. You'll never have to do ``app.use`` directly.
+
+#### controller conventions
+1. every controller file will export a **load** method which gets passed a controller instance
+1. the controller instance acts as a wrapper around **app.use**, utilizing the **register** method (see example below)
+1. there are no strict conventions for file naming
 
 
 ```
@@ -50,7 +57,7 @@ module.exports = function(controller) {
     *    ... routing ...
     * });
     */
-  
+
   controller.register('/users', function(router) {
     /**
      * this is just the regular express.Router. Nothing fancy here
@@ -65,6 +72,7 @@ module.exports = function(controller) {
 }
 ```
 
+
 ### app/middleware
 All middleware related files are stored here. This includes route loading, asset loading (not relevant for this app), default error conditions, etc.
 
@@ -75,6 +83,9 @@ When adding your own middleware methods/files there are a few conventions in pla
 1. The exporting is done at the bottom of the file
 1. Once completely defined, it should be added to the **app/middleware/index.js** load sequence
 1. It should **NOT** be loaded after the error middleware (unless there are special circumstances requiring it so)
+
+### config/assets
+All asset specific configurations exist in this file. See [Mincer](https://github.com/nodeca/mincer)
 
 ## Install & Run
 
