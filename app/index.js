@@ -1,5 +1,6 @@
 var env = process.env.NODE_ENV || 'development';
-var container = require('../lib/injector').create();
+var Injector = require('injector');
+var container = Injector.create();
 
 var express = require('express');
 var app = express();
