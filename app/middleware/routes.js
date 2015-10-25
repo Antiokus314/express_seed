@@ -1,11 +1,11 @@
 var path = require('path');
-var fs = require('fs');
 var controllersDir = path.resolve(path.join(__dirname, '..', 'controllers'));
+var fs = require('fs');
 
 var middleware = {
   load: function(container) {
-    fs.readdirSync(controllersDir).forEach(function(controllerFile) {
-      var controller = require(path.join(controllersDir, controllerFile));
+    fs.readdirSync(controllersDir).forEach(function(file) {
+      var controller = require(path.join(controllersDir, file));
       container.get(controller.inject, controller.load);
     });
   }

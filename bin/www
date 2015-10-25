@@ -6,11 +6,9 @@
 
 var debug = require('debug')('express_seed:server');
 var http = require('http');
+var application = require('../app');
 
-
-require('../app').get('app', function(app) {
-  load(app);
-});
+load(application);
 
 function load(app) {
   /**

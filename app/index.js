@@ -11,4 +11,4 @@ container.set('app', app);
 require('./utilities').load(container);
 require('./middleware').load(container);
 
-module.exports = container;
+module.exports = app;
