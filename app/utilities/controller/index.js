@@ -1,6 +1,6 @@
-var Router = require('express').Router;
+exports.inject = ['app', 'Router'];
+exports.load = function(app, Router) {
 
-function load(app) {
   var Controller = {
     create: function(name, url) {
       var controller = Object.create(Controller.prototype);
@@ -21,10 +21,4 @@ function load(app) {
   };
 
   return Controller;
-};
-
-module.exports = {
-  load: function(app) {
-    return load(app);
-  }
 };

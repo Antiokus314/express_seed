@@ -1,13 +1,11 @@
-var middleware = {
-  load: function load(container) {
-    container.get('app', function(app) {
-      require('./basic').load(app);
-      require('./views').load(app);
-      require('./assets').load(app);
-      require('./routes').load(container);
-      require('./errors').load(app);
-    })
-  }
-};
+var AppContainer = require('injector').fetch('main');
 
-module.exports = middleware;
+[
+  require('./basic'),
+  require('./views'),
+  require('./assets'),
+  require('./routes'),
+  require('./errors')
+].forEach(function(middleware) {
+  AppContainer.get(middleware.inject, middleware.load);
+});

@@ -1,6 +1,5 @@
 var path = require('path');
-var appPath = path.resolve(path.join(__dirname, '..', 'app'));
-var defaultAssetPath = path.join(appPath, 'assets');
+var defaultAssetPath = path.resolve(path.join(__dirname, '..', 'app', 'assets'));
 
 
 module.exports = {

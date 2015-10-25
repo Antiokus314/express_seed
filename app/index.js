@@ -1,14 +1,16 @@
 var env = process.env.NODE_ENV || 'development';
 var Injector = require('injector');
-var container = Injector.create();
+var AppContainer = Injector.create('main');
 
 var express = require('express');
 var app = express();
 
 app.set('env', env);
-container.set('app', app);
+AppContainer.set('app', app);
+AppContainer.set('Router', express.Router);
 
-require('./utilities').load(container);
-require('./middleware').load(container);
+require('../config');
+require('./utilities')
+require('./middleware')
 
 module.exports = app;

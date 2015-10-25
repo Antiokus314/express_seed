@@ -1,14 +1,9 @@
+var AppContainer = require('injector').fetch('main');
 var path = require('path');
-var controllersDir = path.resolve(path.join(__dirname, '..', 'controllers'));
 var fs = require('fs');
+var controllersDir = path.resolve(path.join(__dirname, '..', 'controllers'));
 
-var middleware = {
-  load: function(container) {
-    fs.readdirSync(controllersDir).forEach(function(file) {
-      var controller = require(path.join(controllersDir, file));
-      container.get(controller.inject, controller.load);
-    });
-  }
-};
-
-module.exports = middleware;
+fs.readdirSync(controllersDir).forEach(function(file) {
+  var controller = require(path.join(controllersDir, file));
+  AppContainer.get(controller.inject, controller.load);
+});

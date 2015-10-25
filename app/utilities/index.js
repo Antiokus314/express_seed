@@ -1,7 +1,8 @@
-module.exports = {
-  load: function(container) {
-    container.get('app', function(app) {
-      container.set('Controller', require('./Controller').load(app));
-    });
-  }
-}
+var AppContainer = require('injector').fetch('main');
+
+var c = require('./controller');
+AppContainer.get(c.inject, function() {
+  var Controller = c.load.apply(null, arguments);
+  AppContainer.set('Controller', Controller);
+});
+

@@ -1,5 +1,6 @@
-var controller = function(Controller) {
 
+exports.inject = 'Controller';
+exports.load = function(Controller) {
   var homeController = Controller.create('homeController', '/');
 
   homeController.register(function(router) {
@@ -7,9 +8,4 @@ var controller = function(Controller) {
       res.render('index', { title: 'Express Seed' });
     });
   });
-}
-
-module.exports = {
-  inject: 'Controller',
-  load: controller
-}
+};
