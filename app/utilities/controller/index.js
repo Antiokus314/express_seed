@@ -1,11 +1,12 @@
-exports.inject = ['app', 'Router'];
-exports.load = function(app, Router) {
+exports.inject = ['app', 'Router', 'ControllerCollection'];
+exports.load = function(app, Router, ControllerCollection) {
 
   var Controller = {
     create: function(name, url) {
       var controller = Object.create(Controller.prototype);
       controller.name = name;
       controller.url = url;
+      ControllerCollection[controller.name] = controller;
       return controller;
     },
     prototype: {
