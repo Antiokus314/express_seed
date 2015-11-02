@@ -15,13 +15,15 @@ A seed expressjs application
 │   ├── assets
 │   ├── controllers
 │   ├── index.js
+│   ├── lib
 │   ├── middleware
 │   ├── utilities
 │   └── views
 ├── bin
 │   └── www
 ├── config
-│   └── assets.js
+│   ├── assets.js
+│   └── index.js
 └── package.json
 ```
 
@@ -40,25 +42,27 @@ All controllers get loaded into this directory. The controller interface is fair
 Some utilities have been put in place, for ease of use. You'll never have to do ``app.use`` directly.
 
 #### controller conventions
-1. every controller file will export a **load** method which gets passed a controller instance
+1. every controller file will export an **inject** property, either a **string** or **array of strings** representing the objects required for this controller.
+1. every controller file will export a **load** property, which is a function that has the above injected modules.
 1. the controller instance acts as a wrapper around **app.use**, utilizing the **register** method (see example below)
 1. there are no strict conventions for file naming
 
-
 ```
-app/controllers/users_controller.js
+app/controllers/usersController.js
 or
-app/controllers/users_controller/index.js
+app/controllers/usersController/index.js
 
-module.exports = function(controller) {
+exports.injector = 'Controller';
+exports.load = function(Controller) {
+  var usersController = Controller.create('usersController', '/users');
   /**
-    * this is essentially a wrapper around app.use
-    * controller.register(url, callback(router) {
-    *    ... routing ...
-    * });
-    */
+   * this is essentially a wrapper around express.Router, which then calls app.use internally
+   * controller.register(callback(router) {
+   *    ... routing ...
+   * });
+   */
 
-  controller.register('/users', function(router) {
+  usersController.register(function(router) {
     /**
      * this is just the regular express.Router. Nothing fancy here
      */
@@ -68,7 +72,6 @@ module.exports = function(controller) {
       res.send("Users!!");
     });
   });
-
 }
 ```
 
@@ -79,7 +82,8 @@ All middleware related files are stored here. This includes route loading, asset
 #### middleware conventions
 When adding your own middleware methods/files there are a few conventions in place.
 
-1. An object (called "middleware) with a method **load** must be exported
+1. If certain modules in the application are necessary, add an **inject** property to the exports object
+1. Must export a **load** function if injected modules are required
 1. The exporting is done at the bottom of the file
 1. Once completely defined, it should be added to the **app/middleware/index.js** load sequence
 1. It should **NOT** be loaded after the error middleware (unless there are special circumstances requiring it so)

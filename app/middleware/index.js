@@ -7,5 +7,7 @@ var AppContainer = require('easy-di').fetch('main');
   require('./routes'),
   require('./errors')
 ].forEach(function(middleware) {
-  AppContainer.get(middleware.inject, middleware.load);
+  if (middleware.inject && middleware.load) {
+    AppContainer.get(middleware.inject, middleware.load);
+  }
 });
