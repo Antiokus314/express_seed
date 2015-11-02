@@ -1,5 +1,5 @@
 var env = process.env.NODE_ENV || 'development';
-var Injector = require('injector');
+var Injector = require('easy-di');
 var AppContainer = Injector.create('main');
 
 var express = require('express');

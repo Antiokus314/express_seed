@@ -1,4 +1,4 @@
-var AppContainer = require('injector').fetch('main');
+var AppContainer = require('easy-di').fetch('main');
 
 [
   require('./basic'),
