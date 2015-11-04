@@ -1,0 +1,36 @@
+#!/bin/bash
+
+usage() {
+  echo "Usage: "
+  echo "gen controller CONTROLLER_NAME"
+  echo ""
+}
+
+controller () {
+  name="$1"
+  to_write="${name}Controller"
+  file="$(cat ./templates/controller.js)"
+  result="${file//CONTROLLER/$to_write}"
+  result="${result//URL/$name}"
+  mkdir app/controllers/$to_write
+  echo "$result" > app/controllers/$to_write/index.js
+  echo ""
+  echo "$to_write generated in app/controllers/$to_write"
+  echo ""
+}
+
+if [ "$#" -lt 2 ]; then
+  usage
+  exit 1
+fi
+
+case "$1" in
+  "controller")
+    controller "$2"
+    exit 1
+    ;;
+  *)
+    usage
+    exit 1
+    ;;
+esac
