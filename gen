@@ -1,6 +1,6 @@
 #!/bin/bash
 
-usage() {
+usage () {
   echo "Usage: "
   echo "gen controller CONTROLLER_NAME"
   echo ""
@@ -9,14 +9,20 @@ usage() {
 controller () {
   name="$1"
   to_write="${name}Controller"
-  file="$(cat ./templates/controller.js)"
-  result="${file//CONTROLLER/$to_write}"
-  result="${result//URL/$name}"
-  mkdir app/controllers/$to_write
-  echo "$result" > app/controllers/$to_write/index.js
-  echo ""
-  echo "$to_write generated in app/controllers/$to_write"
-  echo ""
+  if [[ ! -e "app/controllers/$to_write" ]]; then
+    file="$(cat ./templates/controller.js)"
+    result="${file//CONTROLLER/$to_write}"
+    result="${result//URL/$name}"
+    mkdir app/controllers/$to_write
+    echo "$result" > app/controllers/$to_write/index.js
+    echo ""
+    echo "$(tput setaf 2)$to_write generated in app/controllers/$to_write $(tput sgr0)"
+    echo ""
+  else
+    echo ""
+    echo "$(tput setaf 1)$to_write already exists $(tput sgr0)"
+    echo ""
+  fi
 }
 
 if [ "$#" -lt 2 ]; then
