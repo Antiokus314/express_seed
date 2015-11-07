@@ -6,75 +6,81 @@ var Mincer = require('mincer');
 var path = require('path');
 var env = new Mincer.Environment(path.join(__dirname, '..', '..'));
 
-// inject dependencies
-exports.inject = ['AssetConfig', 'app'];
-exports.load = function(AssetConfig, app) {
-  // load macro-processor config (allows the usage of "$$ asset $$" in specified extensions
-  Mincer.MacroProcessor.configure(AssetConfig.assetMacroProcessor);
+var AssetMiddleware = {
+  // inject dependencies
+  inject: ['AssetConfig', 'app'],
+  load: function(AssetConfig, app) {
+    // load macro-processor config (allows the usage of "$$ asset $$" in specified extensions
+    Mincer.MacroProcessor.configure(AssetConfig.assetMacroProcessor);
 
-  /**
-   * @class AssetMiddleware
-   * @classdesc middleware singleton object
-   */
-  var AssetMiddleware = {
     /**
-     * @static loadAssetPaths
+     * @private loadAssetPaths
      * load the asset paths defined in the AssetConfig
      */
-    loadAssetPaths: function() {
+    function loadAssetPaths() {
       AssetConfig.assetPaths.forEach(function(p) {
         env.appendPath(p);
       });
-    },
+    }
+
     /**
-     * @static createAssetPipeline
+     * @private createAssetPipeline
      * to be called after loading asset paths. Creates a local server instance to serve up assets
      * gets loaded into the app instance as middleware
      */
-    createAssetPipeline: function() {
+    function createAssetPipeline() {
       app.use(AssetConfig.mountPoint, Mincer.createServer(env));
-    },
+    }
+
     /**
-     * @static findAsset
+     * @private findAsset
      * @param {string} file
      * @param {object} [opts]
      * @return {string} path to asset file
      */
-    findAsset: function(file, opts) {
+    function findAsset(file, opts) {
       var asset = env.findAsset(file, opts);
       if (!asset) {
         throw new Error("File [" + file + "] not found");
       } else {
         return path.join(AssetConfig.mountPoint, asset.digestPath);
       }
-    },
+    }
+
     /**
-     * @static jsAsset
+     * @private jsAsset
      * @param {string} file
      * @param {object} opts
      * @return {string} js script tag with loaded asset path
      */
-    jsAsset: function(file, opts) {
-      return '<script type="application/javascript" src="' + AssetMiddleware.findAsset(file, opts) + '"></script>';
-    },
+    function jsAsset(file, opts) {
+      return '<script type="application/javascript" src="' + findAsset(file, opts) + '"></script>';
+    }
+
     /**
-     * @static cssAsset
+     * @private cssAsset
      * @param {string} file
      * @param {object} opts
      * @return {string} css link tag with loaded asset path
      */
-    cssAsset: function cssAsset(file, opts) {
-      return '<link type="text/css" rel="stylesheet" href="' + AssetMiddleware.findAsset(file, opts) + '"/>';
+    function cssAsset(file, opts) {
+      return '<link type="text/css" rel="stylesheet" href="' + findAsset(file, opts) + '"/>';
     }
+
+    /**
+     * execution
+     * 1) load asset paths
+     * 2) create asset pipeline
+     * 3) register asset path finder into environment
+     * 4) load asset finders (generic, js and css) into app.locals
+     */
+    loadAssetPaths();
+    createAssetPipeline();
+    env.registerHelper('asset_path', findAsset);
+    app.locals.asset_path = findAsset;
+    app.locals.css = cssAsset;
+    app.locals.js = jsAsset;
   }
+}
 
-  // run AssetMiddleware
-  AssetMiddleware.loadAssetPaths();
-  AssetMiddleware.createAssetPipeline();
-  env.registerHelper('asset_path', AssetMiddleware.findAsset);
-  app.locals.asset_path = AssetMiddleware.findAsset;
-  app.locals.css = AssetMiddleware.cssAsset;
-  app.locals.js = AssetMiddleware.jsAsset;
-
-  return AssetMiddleware;
-};
+module.exports = AssetMiddleware;
