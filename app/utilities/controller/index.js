@@ -36,7 +36,6 @@ exports.load = function(app, Router, ControllerCollection) {
        *
        * @description
        * register method gets called with an express.Router instance
-       * the router gets preloaded with some middleware and then gets provided to the callback
        * once the callback is executed, the router gets loaded onto the app
        */
       register: function(cb) {
@@ -45,8 +44,6 @@ exports.load = function(app, Router, ControllerCollection) {
         }
         var self = this;
         var router = Router();
-        router.use(bodyParser.json());
-        router.use(bodyParser.urlencoded({ extended: true }));
         cb(router);
         app.use(self.url, router);
       }
