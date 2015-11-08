@@ -24,7 +24,12 @@ A seed expressjs application
 ├── config
 │   ├── assets.js
 │   └── index.js
-└── package.json
+├── del
+├── gen
+├── package.json
+└── templates
+    ├── controller.js
+    └── middleware.js
 ```
 
 
@@ -42,37 +47,32 @@ All controllers get loaded into this directory. The controller interface is fair
 Some utilities have been put in place, for ease of use. You'll never have to do ``app.use`` directly.
 
 #### controller conventions
-1. every controller file will export an **inject** property, either a **string** or **array of strings** representing the objects required for this controller.
-1. every controller file will export a **load** property, which is a function that has the above injected modules.
-1. the controller instance acts as a wrapper around **app.use**, utilizing the **register** method (see example below)
-1. there are no strict conventions for file naming
+Use the **generator** helper script to scaffold out a new controller. e.g.
 
+```bash
+$ ./gen controller users
+
+usersController generated in app/controllers/usersController
 ```
-app/controllers/usersController.js
-or
-app/controllers/usersController/index.js
 
-exports.injector = 'Controller';
+```js
+//app/controllers/usersController/index.js
+
+exports.inject = 'Controller';
 exports.load = function(Controller) {
   var usersController = Controller.create('usersController', '/users');
-  /**
-   * this is essentially a wrapper around express.Router, which then calls app.use internally
-   * controller.register(callback(router) {
-   *    ... routing ...
-   * });
-   */
 
   usersController.register(function(router) {
-    /**
-     * this is just the regular express.Router. Nothing fancy here
-     */
 
     /* GET (index) Users */
     router.get('/', function(req, res) {
       res.send("Users!!");
     });
+
   });
-}
+
+  return usersController;
+};
 ```
 
 
@@ -80,11 +80,33 @@ exports.load = function(Controller) {
 All middleware related files are stored here. This includes route loading, asset loading (not relevant for this app), default error conditions, etc.
 
 #### middleware conventions
-When adding your own middleware methods/files there are a few conventions in place.
+Use the **generator** helper script to scaffold out a new middleware singleton . e.g.
 
-1. If certain modules in the application are necessary, add an **inject** property to the exports object
-1. Must export a **load** function if injected modules are required
-1. The exporting is done at the bottom of the file
+```bash
+$ ./gen middleware Auth
+
+AuthMiddleware generated in app/middleware/Auth
+```
+
+```js
+//app/middleware/Auth/index.js
+/**
+ * AuthMiddleware Singleton
+ * uses app
+ */
+
+/**
+ * @class AuthMiddleware
+ */
+var AuthMiddleware = {
+  inject: 'app',
+  load: function(app) {
+  }
+};
+
+module.exports = AuthMiddleware;
+```
+
 1. Once completely defined, it should be added to the **app/middleware/index.js** load sequence
 1. It should **NOT** be loaded after the error middleware (unless there are special circumstances requiring it so)
 
