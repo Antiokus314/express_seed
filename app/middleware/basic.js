@@ -22,6 +22,6 @@ var BasicMiddleware = {
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(cookieParser());
   }
-}
+};
 
 module.exports = BasicMiddleware;

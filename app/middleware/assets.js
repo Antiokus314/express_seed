@@ -84,6 +84,6 @@ var AssetMiddleware = {
     app.locals.css = cssAsset;
     app.locals.js = jsAsset;
   }
-}
+};
 
 module.exports = AssetMiddleware;
