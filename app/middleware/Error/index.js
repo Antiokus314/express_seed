@@ -1,8 +1,11 @@
 /**
- * @class ErrorMiddleware
+ * ErrorMiddleware Singleton
  * uses app
  */
 
+/**
+ * @class ErrorMiddleware
+ */
 var ErrorMiddleware = {
   inject: 'app',
   load: function(app) {

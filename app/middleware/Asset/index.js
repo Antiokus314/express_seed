@@ -2,9 +2,10 @@
  * AssetMiddleware Singleton
  * uses AssetConfig, app
  */
+
 var Mincer = require('mincer');
 var path = require('path');
-var env = new Mincer.Environment(path.join(__dirname, '..', '..'));
+var env = new Mincer.Environment(path.join(__dirname, '..', '..', '..'));
 
 /**
  * @class AssetMiddleware

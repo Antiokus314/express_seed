@@ -1,12 +1,15 @@
 /**
- * @class RoutesMiddleware
+ * RoutesMiddleware Singleton
  */
 
 var AppContainer = require('easy-di').fetch('main');
 var path = require('path');
 var fs = require('fs');
-var controllersDir = path.resolve(path.join(__dirname, '..', 'controllers'));
+var controllersDir = path.resolve(path.join(__dirname, '..', '..', 'controllers'));
 
+/**
+ * @class RoutesMiddleware
+ */
 var RoutesMiddleware = {
   inject: [],
   load: function() {
