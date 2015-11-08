@@ -2,7 +2,7 @@
 
 usage () {
   echo "Usage: "
-  echo "gen controller CONTROLLER_NAME"
+  echo "gen [controller,middleware] NAME"
   echo ""
 }
 
@@ -25,6 +25,24 @@ controller () {
   fi
 }
 
+middleware () {
+  name="$1"
+  to_write="${name}Middleware"
+  if [[ ! -e "app/middleware/$name" ]]; then
+    file="$(cat ./templates/middleware.js)"
+    result="${file//MIDDLEWARE/$to_write}"
+    mkdir app/middleware/$name
+    echo "$result" > app/middleware/$name/index.js
+    echo ""
+    echo "$(tput setaf 2)$to_write generated in app/middleware/$name $(tput sgr0)"
+    echo ""
+  else
+    echo ""
+    echo "$(tput setaf 1)$to_write already exists $(tput sgr0)"
+    echo ""
+  fi
+}
+
 if [ "$#" -lt 2 ]; then
   usage
   exit 1
@@ -33,6 +51,10 @@ fi
 case "$1" in
   "controller")
     controller "$2"
+    exit 1
+    ;;
+  "middleware")
+    middleware "$2"
     exit 1
     ;;
   *)

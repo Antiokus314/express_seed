@@ -21,6 +21,20 @@ controller () {
   fi
 }
 
+middleware () {
+  name="$1"
+  if [ -e "app/middleware/$name" ]; then
+    rm -rf app/middleware/$name
+    echo ""
+    echo "$(tput setaf 3)removed ${name}Middleware $(tput sgr0)"
+    echo ""
+  else
+    echo ""
+    echo "$(tput setaf 1)${name}Middleware does not exist. Cannot delete $(tput sgr0)"
+    echo ""
+  fi
+}
+
 if [ "$#" -lt 2 ]; then
   usage
   exit 1
@@ -29,6 +43,10 @@ fi
 case "$1" in
   "controller")
     controller "$2"
+    exit 1
+    ;;
+  "middleware")
+    middleware "$2"
     exit 1
     ;;
   *)
