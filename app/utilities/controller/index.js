@@ -1,50 +1,32 @@
 /**
  * @class ControllerUtility
- * uses - app, Router, ControllerCollection
+ * uses - app, Router, Controllers
  */
-var bodyParser = require('body-parser');
-
-// inject required dependencies
 var ControllerUtility = {
-  inject: ['app', 'Router'],
-  load: function(app, Router) {
+  as: 'Controller',
+  inject: ['app', 'Router', 'Controllers'],
+  load: function(app, Router, Controllers) {
     /**
      * @class Controller
      */
     var Controller = {
       /**
-       * @static create
+       * @static define
        * @param {string} name
-       * @param {string} url
-       * @returns {object} controller instance
-       *
-       * @description
-       * use Controller.create(name, url) instead of new Controller(name, url)
+       * @param {object} definition
+       * @param definition.url base url of router
+       * @param definition.register function that gets the express.Router and loads the endpoints
        */
-      create: function(name, url) {
-        var controller = Object.create(Controller.prototype);
-        controller.name = name;
-        controller.url = url;
-        return controller;
-      },
-      prototype: {
-        /**
-         * @instance register
-         * @param {function} callback
-         * @returns {null}
-         *
-         * @description
-         * register method gets called with an express.Router instance
-         * once the callback is executed, the router gets loaded onto the app
-         */
-        register: function(cb) {
-          if (typeof cb != 'function') {
-            throw new Error('Controller.register method requires callback function');
-          }
-          var self = this;
+      define: function(name, definition) {
+        if (definition.url && definition.register) {
+          Controllers[name] = definition;
           var router = Router();
-          cb(router);
-          app.use(self.url, router);
+          definition.register(router);
+          definition.router = router;
+          app.use(definition.url, router);
+        }
+        else {
+          throw new Error('controller defintion requires both url string and register method defined');
         }
       }
     };

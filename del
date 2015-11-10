@@ -35,6 +35,21 @@ middleware () {
   fi
 }
 
+helper () {
+  name="$1"
+  to_del="${name}Helper"
+  if [ -e "app/helpers/$to_del" ]; then
+    rm -rf app/helpers/$to_del
+    echo ""
+    echo "$(tput setaf 3)removed $to_del $(tput sgr0)"
+    echo ""
+  else
+    echo ""
+    echo "$(tput setaf 1)$to_del does not exist. Cannot delete $(tput sgr0)"
+    echo ""
+  fi
+}
+
 if [ "$#" -lt 2 ]; then
   usage
   exit 1
@@ -47,6 +62,10 @@ case "$1" in
     ;;
   "middleware")
     middleware "$2"
+    exit 1
+    ;;
+  "helper")
+    helper "$2"
     exit 1
     ;;
   *)
