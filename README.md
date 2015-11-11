@@ -14,6 +14,7 @@ A seed expressjs application
 ├── app
 │   ├── assets
 │   ├── controllers
+│   ├── helpers
 │   ├── index.js
 │   ├── lib
 │   ├── middleware
@@ -30,6 +31,7 @@ A seed expressjs application
 └── templates
     ├── controller.js
     └── middleware.js
+
 ```
 
 
@@ -38,6 +40,9 @@ Loads the relevant controller + middleware information into the application
 
 ### app/utilities
 Loads in utility modules necessary for the application.
+
+### app/helpers
+Loads helper singletons to be utilized in your controllers
 
 ### app/controllers
 All controllers get loaded into this directory. The controller interface is fairly straightforward (uses the built in express.Router)
@@ -58,20 +63,30 @@ usersController generated in app/controllers/usersController
 ```js
 //app/controllers/usersController/index.js
 
+/**
+ * usersController
+ * baseurl: /users
+ */
+
 exports.inject = 'Controller';
 exports.load = function(Controller) {
-  var usersController = Controller.create('usersController', '/users');
 
-  usersController.register(function(router) {
+  Controller.define('usersController', {
+    /**
+     * baseurl for your router to exist under
+     */
+    url: '/users',
+    /**
+     * Define the routes on the express.Router instance that is available to you here
+     */
+    register: function(router) {
 
-    /* GET (index) Users */
-    router.get('/', function(req, res) {
-      res.send("Users!!");
-    });
+      router.get('/', function(req, res, next) {
+        res.send('I am the usersController');
+      });
 
+    }
   });
-
-  return usersController;
 };
 ```
 
