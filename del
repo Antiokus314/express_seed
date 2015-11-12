@@ -2,7 +2,7 @@
 
 usage () {
   echo "Usage: "
-  echo "del controller CONTROLLER_NAME"
+  echo "del [controller,middleware,model,helper] NAME"
   echo ""
 }
 

@@ -2,7 +2,7 @@
 
 usage () {
   echo "Usage: "
-  echo "gen [controller,middleware] NAME"
+  echo "gen [controller,middleware,model,helper] NAME"
   echo ""
 }
 
