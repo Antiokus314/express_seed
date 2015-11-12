@@ -61,6 +61,24 @@ helper () {
   fi
 }
 
+model () {
+  name="$1"
+  to_write="${name}"
+  if [[ ! -e "app/models/$to_write" ]]; then
+    file="$(cat ./templates/model.js)"
+    result="${file//MODEL/$to_write}"
+    mkdir app/models/$to_write
+    echo "$result" > app/models/$to_write/index.js
+    echo ""
+    echo "$(tput setaf 2)${to_write}Model generated in app/models/$to_write $(tput sgr0)"
+    echo ""
+  else
+    echo ""
+    echo "$(tput setaf 1)$to_write already exists $(tput sgr0)"
+    echo ""
+  fi
+}
+
 if [ "$#" -lt 2 ]; then
   usage
   exit 1
@@ -77,6 +95,10 @@ case "$1" in
     ;;
   "helper")
     helper "$2"
+    exit 1
+    ;;
+  "model")
+    model "$2"
     exit 1
     ;;
   *)

@@ -50,6 +50,21 @@ helper () {
   fi
 }
 
+model () {
+  name="$1"
+  to_del="${name}"
+  if [ -e "app/models/$to_del" ]; then
+    rm -rf app/models/$to_del
+    echo ""
+    echo "$(tput setaf 3)removed $to_del $(tput sgr0)"
+    echo ""
+  else
+    echo ""
+    echo "$(tput setaf 1)$to_del does not exist. Cannot delete $(tput sgr0)"
+    echo ""
+  fi
+}
+
 if [ "$#" -lt 2 ]; then
   usage
   exit 1
@@ -66,6 +81,10 @@ case "$1" in
     ;;
   "helper")
     helper "$2"
+    exit 1
+    ;;
+  "model")
+    model "$2"
     exit 1
     ;;
   *)

@@ -11,5 +11,5 @@ exports.load = function(Helper) {
      */
   });
 
-  };
+  }
 };

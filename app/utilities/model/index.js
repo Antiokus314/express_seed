@@ -14,16 +14,20 @@ var ModelUtility = {
        * @static define
        * @param {string} name
        * @param {object} definition - bookshelf model definition
+       * @returns {object} Model
        */
       define: function(name, type, definition) {
         if (!name) {
           throw new Error('Model/Collection must be named');
         }
-        if (!type || (type != 'model' || type != 'collection')) {
+        if (type === 'model' || type === 'collection') {
+          Models[name] = DB[type](name, definition);
+        }
+        else {
           throw new Error('Type of model must be either "model" or "collection" not ' + type);
         }
 
-        Models[name] = DB[type](name, definition);
+        return Models[name];
       }
     };
 
