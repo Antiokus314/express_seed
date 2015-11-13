@@ -11,11 +11,6 @@ var knex = require('knex')({ client: config[env].client, connection: config.defa
  * @class DBManager
  * manages the drop and create of databases
  */
-function err(arg) {
-  console.error('Invalid argument', arg);
-  process.exit(-1);
-}
-
 var DBManager = {
   /**
    * @static run
@@ -25,11 +20,20 @@ var DBManager = {
    */
   run: function(arg) {
     if (arg == 'run' || !DBManager[arg]) {
-      err(arg);
+      DBManager.usage();
+
     }
     else {
       DBManager[arg]();
     }
+  },
+  usage: function() {
+    console.log('USAGE:')
+    console.log('     NODE_ENV=[production,development,staging] npm run setup [create,drop]');
+    console.log('     => default: development');
+    console.log('');
+    knex.destroy();
+    process.exit(0);
   },
   /**
    * @static createDB

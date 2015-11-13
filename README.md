@@ -40,7 +40,7 @@ A seed expressjs application
 ```
 
 ### config/assets
-All asset specific configurations exist in this file. See [Mincer](https://github.com/nodeca/mincer)
+All asset specific configurations exist in this file. See [Mincer](https://github.com/nodeca/mincer). See [asset helpers](#asset_helpers) below
 
 ### app/index.js
 Loads the entire application. Look at it.
@@ -49,16 +49,16 @@ Loads the entire application. Look at it.
 Define all assets css,js here. also load images.
 
 ### app/controllers
-All controllers get loaded into this directory. The controller interface is fairly straightforward (uses the built in express.Router). See the *generator* usage below
+All controllers get loaded into this directory. The controller interface is fairly straightforward (uses the built in express.Router). See the [generator](#generator) usage below
 
 ### app/helpers
-Loads helper classes/singletons to be utilized in your controllers/models. See the *generator* usage below
+Loads helper classes/singletons to be utilized in your controllers/models. See the [generator](#generator) usage below
 
 ### app/middleware
-All middleware related files are stored here. This includes route loading, asset loading, default error conditions, etc. See the *generator* usage below. Note that middleware does not get dynamically loaded. You must manually require your middleware module in app/middleware/index.js
+All middleware related files are stored here. This includes route loading, asset loading, default error conditions, etc. See the [generator](#generator) usage below. Note that middleware does not get dynamically loaded. You must manually require your middleware module in app/middleware/index.js
 
 ### app/models
-Define models here. By default, the database adapter is **postgresql**. The ORM used is [bookshelf](http://bookshelfjs.org/). See the *generator* usage below
+Define models here. By default, the database adapter is **postgresql**. The ORM used is [bookshelf](http://bookshelfjs.org/). See the [generator](#generator) usage below
 
 ### app/utilities
 Loads in utility modules necessary for the application.
@@ -68,14 +68,16 @@ Define your views here. Default template engine is [Jade](http://jade-lang.com/)
 
 ---
 
-## generators & deleters
+## generators & deleters<a name="generator"></a>
 For convenience, there are generator and deleter scripts for
-* Helpers
-* Controllers
-* Models
-* Middleware
+* [Helpers](#gen_helpers)
+* [Controllers](#gen_controllers)
+* [Models](#gen_models)
+* [Middleware](#gen_middleware)
+
 
 ### Usage
+
 
 ```bash
 $ ./gen -h
@@ -89,7 +91,7 @@ del [controller,middleware,model,helper] NAME
 
 ```
 
-#### controllers
+#### controllers<a name="gen_controllers"></a>
 
 ```bash
 $ ./gen controller users
@@ -137,7 +139,8 @@ exports.load = function(Controller) {
 ```
 
 
-#### middleware
+#### middleware<a name="gen_middleware"></a>
+
 
 ```bash
 $ ./gen middleware Auth
@@ -165,7 +168,8 @@ var AuthMiddleware = {
 module.exports = AuthMiddleware;
 ```
 
-#### models
+#### models<a name="gen_models"></a>
+
 
 ```bash
 $ ./gen model User
@@ -198,7 +202,8 @@ exports.load = function(Model) {
 ```
 
 
-#### helpers
+#### helpers<a name="gen_helpers"></a>
+
 
 ```bash
 $ ./gen helper User
@@ -228,17 +233,115 @@ exports.load = function(Helper) {
 
 ---
 
-## Scripts (package.json)
-* start
-  * the basic npm start command (starts the server)
-* db
-  * a wrapper around [knex](http://knexjs.org/) executable. Use this for creating, updating, & removing migration scripts
-* setup
-  * create
-    * create the database as defined in the **knexfile.js** for the specified NODE_ENV (default *development*)
-  * drop
-    * drop the database as defined in the **knexfile.js** for the specified NODE_ENV (default *development*)
+### Asset helpers<a name="asset_helpers"></a>
+Since this uses [Mincer](https://github.com/nodeca/mincer), there are some asset helpers in place for your views.
 
+* css
+  * returns an html link tag with the normalized asset path
+* js
+  * return an html script tag with the normalized asset path
+* asset_path
+  * returns the string path to the asset. Useful for images (for which there is currently no helper)
+
+Lets say we have assets like so
+
+**app/assets/javascripts/hello.js**
+
+```js
+window.hello = function() {
+  return 'hello world!';
+};
+```
+
+**app/assets/javascripts/application.js**
+
+```js
+//= require ./hello
+console.log(hello());
+
+```
+
+**app/views/index.jade**
+
+```jade
+extends layout
+
+block js
+// make sure to use the escape sequence
+  != js('application.js')
+
+block content
+  h1 This is my index file!
+```
+
+---
+
+
+## Scripts (package.json)
+
+```json
+...
+  "scripts": {
+    "start": "DEBUG=*:server node ./bin/www",
+    "db": "node ./node_modules/.bin/knex",
+    "setup": "node scripts/setup.js"
+  },
+...
+```
+
+```bash
+$ npm start
+> express_seed@0.0.0 start /path/to/express_seed
+> DEBUG=*:server node ./bin/www
+
+  express_seed:server Listening on port 3000 +0ms
+
+```
+```bash
+# this is just a wrapper around the knex executable
+npm run db
+
+> express_seed@0.0.0 db /path/to/express_seed
+> node ./node_modules/.bin/knex
+
+
+  Usage: knex [options] [command]
+
+
+  Commands:
+
+    init [options]                         Create a fresh knexfile.
+    migrate:make [options] <name>         Create a named migration file.
+    migrate:latest                         Run all migrations that have not yet been run.
+    migrate:rollback                       Rollback the last set of migrations performed.
+    migrate:currentVersion                View the current version for the migration.
+    seed:make [options] <name>            Create a named seed file.
+    seed:run                              Run seed files.
+
+  Options:
+
+    -h, --help         output usage information
+    -V, --version      output the version number
+    --debug            Run with debugging.
+    --knexfile [path]  Specify the knexfile path.
+    --cwd [path]       Specify the working directory.
+    --env [name]       environment, default: process.env.NODE_ENV || development
+
+```
+
+```bash
+# setup the database
+npm run setup
+
+
+> express_seed@0.0.0 setup /Users/navneetgarg/projects/node/express_seed
+> node scripts/setup.js
+
+USAGE:
+     NODE_ENV=[production,development,staging] npm run setup [create,drop]
+     => default: development
+
+```
 
 ## Install & Run
 
@@ -249,6 +352,6 @@ npm install
 
 // change the name the names of some stuff to your app name (or not)
 // then run below
-
+npm setup create
 npm start
 ```
