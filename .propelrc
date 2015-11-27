@@ -1,0 +1,4 @@
+{
+  "type": "express",
+  "templates_dir": ".templates"
+}
