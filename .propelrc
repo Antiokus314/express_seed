@@ -1,4 +1,22 @@
 {
   "type": "express",
-  "templates_dir": ".templates"
+  "templates": {
+    "directory": ".templates",
+    "model": {
+      "replace": "MODEL",
+      "destination": "app/models"
+    },
+    "controller": {
+      "replace": "CONTROLLER",
+      "destination": "app/controllers"
+    },
+    "middleware": {
+      "replace": "MIDDLEWARE",
+      "destination": "app/middleware"
+    },
+    "helper": {
+      "replace": "HELPER",
+      "destination": "app/helpers"
+    }
+  }
 }
